@@ -6,6 +6,7 @@ class BBCON:
         self.motobs = motobs
         self.active_behaviors = None
         self.arbitrator = arbitrator
+        self.arbitrator.BBCON = self
 
     def add_behavior(self, behavior):
         self.behaviors.append(behavior)
