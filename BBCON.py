@@ -46,7 +46,9 @@ class BBCON:
             #not yet implemed
         #Wait
             # not yet implemed
+        
         #reset all sensob
+
         for sensob in self.active_sensobs:
             sensob.reset()
 
