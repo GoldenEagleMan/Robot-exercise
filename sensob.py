@@ -105,11 +105,12 @@ class CameraSensob(Sensob):
 
     def __init__(self):
         camera = Camera(128, 30)
+        self.match_degree = 0
         super(CameraSensob, self).__init__(camera)
 
     def update(self):
         super().update()
-        self.interpret_image()
+        self.value = self.interpret_image()
 
     def interpret_image(self):
         camera = self.sensors
