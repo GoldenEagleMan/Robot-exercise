@@ -1,4 +1,1 @@
 class Motob:
-
-
-#hello worldgergwe
