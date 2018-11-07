@@ -39,6 +39,7 @@ class ReflectanceBoardSensob(Sensob):
         self.sensors.reset()
         self.sensors.update()
 
+
 class UltrasoundSensob(Sensob):
 
     def __init__(self):
@@ -46,6 +47,9 @@ class UltrasoundSensob(Sensob):
         super().__init__(ultra)
 
     def update(self):
+        self.sensors.reset()
+        self.sensors.update()
+
 
 class LineFollowingSensob(ReflectanceBoardSensob):
 
