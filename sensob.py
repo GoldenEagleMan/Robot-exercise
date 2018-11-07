@@ -7,15 +7,14 @@ class Sensob:
 
     def __init__(self, sensors):
         self.value = None
-        self.sensors = sensors  #1 sensor or list of used sensors
+        self.sensor = sensors  #1 sensor or list of used sensors
 
     def update(self):
         pass
 
     def reset(self):
-        for sensor in self.sensors:
-            sensor.reset()
-            pass
+        self.sensor.reset()
+        pass
 
     def get_value(self):
         return self.value
@@ -27,20 +26,12 @@ class IRSensob(Sensob):
         ir_sensor = IRProximitySensor()
         super().__init__(ir_sensor)
 
-    def update(self):
-        self.sensors.reset()
-        self.sensors.update()
-
 
 class ReflectanceBoardSensob(Sensob):
 
     def __init__(self):
         reflectance_board = ReflectanceSensors()
         super().__init__(reflectance_board)
-
-    def update(self):
-        self.sensors.reset()
-        self.sensors.update()
 
 
 class UltrasoundSensob(Sensob):
@@ -50,9 +41,7 @@ class UltrasoundSensob(Sensob):
         super().__init__(ultra)
 
     def update(self):
-        self.sensors.reset()
-        self.sensors.update()
-        self.value = int(self.sensors.get_value()*10) #cm to mm
+        self.value = int(self.sensor.get_value() * 10) #cm to mm
 
 
 class LineFollowingSensob(ReflectanceBoardSensob):
@@ -61,8 +50,7 @@ class LineFollowingSensob(ReflectanceBoardSensob):
         super().__init__()
 
     def update(self):
-        super().update()
-        red_values = self.sensors.get_value()
+        red_values = self.sensor.get_value()
         values_and_sensors = {}
         for i in range(0, len(red_values)):
             values_and_sensors[red_values[i]] = i
@@ -76,8 +64,7 @@ class EndpointDetectionSensob(ReflectanceBoardSensob):
         super().__init__()
 
     def update(self):
-        super().update()
-        red_values = self.sensors.get_value()
+        red_values = self.sensor.get_value()
         for value in red_values:
             if value - 0.05 > 0:
                 self.value = False
@@ -90,8 +77,7 @@ class IRSensobLeft(IRSensob):
         super().__init__()
 
     def update(self):
-        super().update()
-        self.value = self.sensors.get_value()[0] #0,1 left and right? right and left?
+        self.value = self.sensor.get_value()[0] #0,1 left and right? right and left?
 
 
 class IRSensobRight(IRSensob):
@@ -100,8 +86,7 @@ class IRSensobRight(IRSensob):
         super().__init__()
 
     def update(self):
-        super().update()
-        self.value = self.sensors.get_value()[1]
+        self.value = self.sensor.get_value()[1]
 
 
 class CameraSensob(Sensob):
@@ -112,11 +97,10 @@ class CameraSensob(Sensob):
         super(CameraSensob, self).__init__(camera)
 
     def update(self):
-        super().update()
         self.value = self.interpret_image()
 
     def interpret_image(self):
-        camera = self.sensors
+        camera = self.sensor
         image = camera.value # the matrix of pixels
         occurrence_array = [0 for i in range(128)]
 

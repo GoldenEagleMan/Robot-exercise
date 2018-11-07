@@ -6,8 +6,21 @@ class BBCON:
         self.motobs = motobs
         self.active_behaviors = []
         self.active_sensobs = []
+        self.active_sensors = []
         self.arbitrator = arbitrator
         self.run_behavior = None
+
+    def run_one_timestep(self):
+        self.compile_objects_list()
+        self.update_objects()
+        #invoke arbitrator.
+        self.arbitrator.choose_action()
+        if self.run_behavior[1]:
+            self.end_program()
+        self.motobs.decodeMR(self.run_behavior[0])
+        #reset all sensob
+        for sensob in self.active_sensobs:
+            sensob.reset()
 
     def add_behavior(self, behavior):
         self.behaviors.append(behavior)
@@ -18,44 +31,54 @@ class BBCON:
         pass
 
     def activate_behavior(self, behavior):
-        behavior.active_flag = True
         if behavior not in self.active_behaviors:
             self.active_behaviors.append(behavior)
-        for sensob in behavior.sensobs:
-            if sensob not in self.active_sensobs:
-                self.active_sensobs.append(sensob)
         pass
 
     def deactivate_behavior(self, behavior):
-        behavior.active_flag = False
         if behavior in self.active_behaviors:
             self.active_behaviors.remove(behavior)
-        for sensob in behavior.sensobs:
-            if sensob in self.active_sensobs:
-                self.active_sensobs.remove(sensob)
-
         pass
 
-    def run_one_timestep(self):
-        #update all sensob
-        for sensob in self.active_sensobs:
-            sensob.update()
-        #update all behaviors
+    def activate_sensob(self, sensob):
+        if sensob not in self.active_sensobs:
+            self.active_sensobs.append(sensob)
+
+    def activate_sensor(self, sensor):
+        if sensor not in self.active_sensors:
+            self.active_sensors.append(sensor)
+
+    def compile_objects_list(self):
+
+        # construct active behaviors list
         for behavior in self.behaviors:
-            behavior.update()
-        #invoke arbitrator.
-        self.arbitrator.choose_action() #can be it must be passed a list of behaviors
-        #update all motors
-        if self.run_behavior[1] != False:
-            self.motobs.decodeMR(self.run_behavior[0])
-        else:
-            self.end_program()
-            #Wait
+            if behavior.active_flag:
+                self.activate_behavior(behavior)
+            else:
+                self.deactivate_behavior(behavior)
 
-        #reset all sensob
+        # construct active sensobs list
+        self.active_sensobs = []
+        for behavior in self.active_behaviors:
+            for sensob in behavior.sensobs:
+                self.activate_sensob(sensob)
 
+        # construct active sensor list
+        self.active_sensors = []
         for sensob in self.active_sensobs:
-            sensob.reset()
+            self.activate_sensor(sensob.sensors)
+
+    def update_objects(self):
+        #update all sensors, sensobs and behaviors
+        for sensor in self.active_sensors:
+            sensor.reset()
+            sensor.update()
+        for sensob in self.sensobs:
+            sensob.update()
+        for behavior in self.active_behaviors:
+            behavior.update()
 
     def end_program(self):
         pass
+
+
