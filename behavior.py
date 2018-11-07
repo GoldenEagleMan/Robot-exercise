@@ -1,6 +1,13 @@
 from abc import abstractclassmethod
 from sensob import *
 
+''''
+motor recomandation in following form: (match_degree , ("command", angle) )
+angle in integer [-180, 180]
+command in string : goForward, goBackward, turnLeft, turnRight, stopAllMotors
+MR is a tuple of float and tuple of string and integer
+'''
+
 
 class Behavior:
     def __init__(self, BBCON, sensobs, priority):
