@@ -7,6 +7,7 @@ class BBCON:
         self.active_behaviors = []
         self.active_sensobs = []
         self.arbitrator = arbitrator
+        self.run_behavior = None
 
     def add_behavior(self, behavior):
         self.behaviors.append(behavior)
@@ -38,19 +39,23 @@ class BBCON:
     def run_one_timestep(self):
         #update all sensob
         for sensob in self.active_sensobs:
-            sensob.update
+            sensob.update()
         #update all behaviors
         for behavior in self.behaviors:
-            behavior.update
+            behavior.update()
         #invoke arbitrator.
         self.arbitrator.choose_action() #can be it must be passed a list of behaviors
         #update all motors
-            #not yet implemed
-        #Wait
-            # not yet implemed
+        if self.run_behavior[1] != False:
+            self.motobs.decodeMR(self.run_behavior[0])
+        else:
+            self.end_program()
+            #Wait
 
         #reset all sensob
 
         for sensob in self.active_sensobs:
             sensob.reset()
 
+    def end_program(self):
+        pass

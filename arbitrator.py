@@ -8,4 +8,4 @@ class Arbitrator:
         for behavior in self.bbcon.active_behaviors:
             if prioritized_behavior == None or prioritized_behavior.weigth < behavior.weigth:
                 prioritized_behavior = behavior
-        return (prioritized_behavior.motor_recommendations, prioritized_behavior.halt_request)
+        self.bbcon.run_behavior = (prioritized_behavior.motor_recommendations, prioritized_behavior.halt_request)
