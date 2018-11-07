@@ -49,6 +49,7 @@ class UltrasoundSensob(Sensob):
     def update(self):
         self.sensors.reset()
         self.sensors.update()
+        self.value = int(self.sensors.get_value()*10) #cm to mm
 
 
 class LineFollowingSensob(ReflectanceBoardSensob):
@@ -98,8 +99,6 @@ class IRSensobRight(IRSensob):
     def update(self):
         super().update()
         self.value = self.sensors.get_value()[1]
-
-
 
 
 
