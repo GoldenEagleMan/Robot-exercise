@@ -1,5 +1,5 @@
 from abc import abstractclassmethod
-from plab.sensob import *
+from sensob import *
 
 
 class Behavior:
@@ -136,3 +136,30 @@ class GoAroundObject(Behavior):
         self.motor_recommendations["turn right"]
         self.priority = 0.7
         self.match_degree = 0.5
+
+
+# Follow line will follow a black line such that the line is in the middle of where the robot drives
+# This behavior will use the reflectance sensors on the robot
+class FollowLine(Behavior):
+    def __init__(self, BBCON, sensobs, priority):
+        super(FollowLine, self).__init__(BBCON, sensobs, priority)
+        self.name = "Go around object"
+        self.r_sensob = ReflectanceBoardSensob()
+        self.sensobs.append(self.r_sensob)
+
+
+
+    def consider_activation(self):
+        super().consider_activation()
+
+
+    def consider_deactivation(self):
+        super().consider_deactivation()
+
+
+    def update(self):
+        super().update()
+
+
+    def sense_and_act(self):
+        super().sense_and_act()
