@@ -2,7 +2,7 @@ from abc import abstractclassmethod
 from sensob import *
 
 ''''
-motor recomandation in following form: (match_degree , ("command", angle) )
+motor recomandation in following form: (("command", angle) )
 angle in integer [-180, 180]
 command in string : goForward, goBackward, turnLeft, turnRight, stopAllMotors
 MR is a tuple of float and tuple of string and integer
@@ -76,14 +76,14 @@ class CollisionDetection(Behavior):
         # and whilst going around an object
         if self.u_sensob.get_value() < self.distance:
             self.active_flag = True
-            self.halt_request = True
+
 
     def consider_deactivation(self):
         # Collision detection will be/remain deactivated, if there is no object spotted through ultrasound
         if (self.u_sensob.get_value() > self.distance):  # the preferred distance will be calculated later
             self.BBCON.deactivate_behavior(self)
             self.active_flag = False
-            self.halt_request = False
+
 
     def update(self):
         for sensor in self.sensobs:
@@ -103,7 +103,7 @@ class CollisionDetection(Behavior):
         self.weight = self.priority * self.match_degree
 
     def sense_and_act(self):
-        self.motor_recommendations["turn left"]  # yet to be made, but will either pass the object on the left or right
+        self.motor_recommendations["turn", -45]  # turns left # yet to be made, but will either pass the object on the left or right
         self.priority = 1
         self.match_degree = 1
 
@@ -122,12 +122,12 @@ class GoAroundObject(Behavior):
     def consider_activation(self):
         if (self.l_IR_sensob.get_value() or self.r_IR_sensob.get_value()):
             self.active_flag = True
-            self.halt_request = True
+
 
     def consider_deactivation(self):
         if not (self.l_IR_sensob.get_value() or self.r_IR_sensob.get_value()):
-            self.active_flag = True
-            self.halt_request = True
+            self.active_flag = False
+
 
     def update(self):
         if self.active:
@@ -140,7 +140,7 @@ class GoAroundObject(Behavior):
         self.weight = self.match_degree * self.priority
 
     def sense_and_act(self):
-        self.motor_recommendations["turn right"]
+        self.motor_recommendations["turnRight", 45]  # turns right
         self.priority = 0.7
         self.match_degree = 0.5
 
@@ -157,7 +157,7 @@ class FollowLine(Behavior):
 
 
     def consider_activation(self):
-        super().consider_activation()
+        if
 
 
     def consider_deactivation(self):
