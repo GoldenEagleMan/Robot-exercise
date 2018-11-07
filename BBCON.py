@@ -1,5 +1,5 @@
 class BBCON:
-
+#hallobois spam
     def __init__(self, behaviors, sensobs, motobs, arbitrator):
         self.behaviors = behaviors
         self.sensobs = sensobs
