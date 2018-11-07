@@ -17,6 +17,7 @@ class BBCON:
         pass
 
     def activate_behavior(self, behavior):
+        behavior.active_flag = True
         if behavior not in self.active_behaviors:
             self.active_behaviors.append(behavior)
         for sensob in behavior.sensobs:
@@ -25,6 +26,7 @@ class BBCON:
         pass
 
     def deactivate_behavior(self, behavior):
+        behavior.active_flag = False
         if behavior in self.active_behaviors:
             self.active_behaviors.remove(behavior)
         for sensob in behavior.sensobs:
