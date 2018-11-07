@@ -124,6 +124,15 @@ class GoAroundObject(Behavior):
 
     def update(self):
         if self.active:
+            self.consider_deactivation()
+
+        else:
+            self.consider_activation()
+
+        self.sense_and_act()
+        self.weight = self.match_degree * self.priority
 
     def sense_and_act(self):
-#hello you sexy
+        self.motor_recommendations["turn right"]
+        self.priority = 0.7
+        self.match_degree = 0.5
