@@ -17,6 +17,9 @@ class Sensob:
             sensor.reset()
             pass
 
+    def get_value(self):
+        return self.value
+
 
 class IRSensob(Sensob):
 
