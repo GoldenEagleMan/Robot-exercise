@@ -36,17 +36,17 @@ class BBCON:
     def run_one_timestep(self):
         #update all sensob
         for sensob in self.active_sensobs:
-            sensob.update()
+            sensob.update
         #update all behaviors
         for behavior in self.behaviors:
-            behavior.update()
+            behavior.update
         #invoke arbitrator.
         self.arbitrator.choose_action() #can be it must be passed a list of behaviors
         #update all motors
             #not yet implemed
         #Wait
             # not yet implemed
-        
+
         #reset all sensob
 
         for sensob in self.active_sensobs:
