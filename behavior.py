@@ -151,15 +151,17 @@ class FollowLine(Behavior):
     def __init__(self, BBCON, sensobs, priority):
         super(FollowLine, self).__init__(BBCON, sensobs, priority)
         self.name = "Go around object"
-        self.r_sensob = ReflectanceBoardSensob()
+        self.line_r_sensob = LineFollowingSensob()
+        self.end_r_sensob = EndpointDetectionSensob()
         self.sensobs.append(self.r_sensob)
 
 
-
+    # Should be activated from the start and should remain activated until it reaches the endpoint
     def consider_activation(self):
         if
 
 
+    # should be deactivated when it reaches the endpoint
     def consider_deactivation(self):
         super().consider_deactivation()
 
