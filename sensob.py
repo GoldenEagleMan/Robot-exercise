@@ -21,35 +21,33 @@ class Sensob:
 
 
 class IRSensob(Sensob):
+    ir_sensor = IRProximitySensor()
 
     def __init__(self):
-        ir_sensor = IRProximitySensor()
-        super().__init__(ir_sensor)
+        super().__init__(IRSensob.ir_sensor)
 
 
 class ReflectanceBoardSensob(Sensob):#0 svart 1 hvit
 
+    reflectance_board = ReflectanceSensors()
+
     def __init__(self):
-        reflectance_board = ReflectanceSensors()
-        super().__init__(reflectance_board)
+        super().__init__(ReflectanceBoardSensob.reflectance_board)
 
 
 class UltrasoundSensob(Sensob):
 
-    def __init__(self):
-        ultra = Ultrasonic()
-        super().__init__(ultra)
-        self.threshold = 0.05
+    ultra = Ultrasonic()
 
+    def __init__(self):
+        super().__init__(UltrasoundSensob.ultra)
+        self.threshold = 0.05
 
     def update(self):
         self.value = int(self.sensor.get_value() * 10) #cm to mm
 
 
 class LineFollowingSensob(ReflectanceBoardSensob):
-
-    def __init__(self):
-        super().__init__()
 
     def update(self):
         red_values = self.sensor.get_value()
@@ -62,8 +60,6 @@ class LineFollowingSensob(ReflectanceBoardSensob):
 
 
 class LineDetectionSensob(ReflectanceBoardSensob):
-    def __init__(self):
-        super().__init__()
 
     def update(self):
         red_values = self.sensor.get_value()
@@ -75,9 +71,6 @@ class LineDetectionSensob(ReflectanceBoardSensob):
 
 class EndpointDetectionSensob(ReflectanceBoardSensob):
 
-    def __init__(self):
-        super().__init__()
-
     def update(self):
         red_values = self.sensor.get_value()
         for value in red_values:
@@ -88,17 +81,11 @@ class EndpointDetectionSensob(ReflectanceBoardSensob):
 
 class IRSensobLeft(IRSensob):
 
-    def __init__(self):
-        super().__init__()
-
     def update(self):
         self.value = self.sensor.get_value()[0] #0,1 left and right? right and left?
 
 
 class IRSensobRight(IRSensob):
-
-    def __init__(self):
-        super().__init__()
 
     def update(self):
         self.value = self.sensor.get_value()[1]
@@ -109,7 +96,7 @@ class CameraSensob(Sensob):
     def __init__(self):
         camera = Camera(128, 30)
         self.match_degree = 0
-        super(CameraSensob, self).__init__(camera)
+        super().__init__(camera)
 
     def update(self):
         self.sensor.reset
