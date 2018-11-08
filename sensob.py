@@ -27,7 +27,7 @@ class IRSensob(Sensob):
         super().__init__(ir_sensor)
 
 
-class ReflectanceBoardSensob(Sensob):
+class ReflectanceBoardSensob(Sensob):#0 svart 1 hvit
 
     def __init__(self):
         reflectance_board = ReflectanceSensors()
@@ -55,7 +55,21 @@ class LineFollowingSensob(ReflectanceBoardSensob):
         for i in range(0, len(red_values)):
             values_and_sensors[red_values[i]] = i
         red_values.sort(reverse=True)
-        self.value = (values_and_sensors.get(red_values[0]), values_and_sensors.get(red_values[3]))
+        #self.value = (values_and_sensors.get(red_values[0]), values_and_sensors.get(red_values[2]))
+        self.value = values_and_sensors.get(red_values[0])
+
+
+class LineDetectionSensob(ReflectanceBoardSensob):
+    def __init__(self):
+        super().__init__()
+
+    def update(self):
+        threshold = 0.05
+        red_values = self.sensor.get_value()
+        for value in red_values:
+            if value <= threshold :
+                self.value = True
+        self.value = False
 
 
 class EndpointDetectionSensob(ReflectanceBoardSensob):
@@ -64,9 +78,10 @@ class EndpointDetectionSensob(ReflectanceBoardSensob):
         super().__init__()
 
     def update(self):
+        threshold = 0.05
         red_values = self.sensor.get_value()
         for value in red_values:
-            if value - 0.05 > 0:
+            if value - threshold > 0:
                 self.value = False
         self.value = True
 
