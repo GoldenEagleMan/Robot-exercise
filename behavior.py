@@ -153,7 +153,8 @@ class FollowLine(Behavior):
         self.name = "Go around object"
         self.line_r_sensob = LineFollowingSensob()
         self.end_r_sensob = EndpointDetectionSensob()
-        self.sensobs.append(self.r_sensob)
+        self.sensobs.append(self.end_r_sensob)
+        self.sensobs.append(self.line_r_sensob)
 
 
     # Should be activated from the start and should remain activated until it reaches the endpoint
@@ -171,4 +172,20 @@ class FollowLine(Behavior):
 
 
     def sense_and_act(self):
-        super().sense_and_act()
+        # Drives straight forward if the line is under sensor 3-4
+        if()
+            self.motor_recommendations["goForward"]
+            self.priority = 0.5
+            self.match_degree = 0.5
+
+        # Drives left if the line is under sensor 1,2 maybe 3
+        elif()
+            self.motor_recommendations["turnLeft", degree]
+            self.priority = 0.5
+            self.match_degree = 0.5
+
+        # Drives right if the line is under sensor 5, 6 maybe 4
+        elif()
+            self.motor_recommendations["turnRight", degree]
+            self.priority = 0.5
+            self.match_degree = 0.5
