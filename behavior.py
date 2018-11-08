@@ -3,8 +3,8 @@ from sensob import *
 
 ''''
 motor recomandation in following form: (("command", angle) )
-angle in integer [-180, 180]
-command in string : goForward, goBackward, turnLeft, turnRight, stopAllMotors
+angle in integer [-90, 90] where negative value is left (0 if goForward, stopAllMotors or goBackward)
+command in string : goForward, goBackward, turn, stopAllMotors
 MR is a tuple of float and tuple of string and integer
 '''
 
