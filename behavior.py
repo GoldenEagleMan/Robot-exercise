@@ -165,8 +165,10 @@ class FollowLine(Behavior):
     # Should be activated from the start and should remain activated until it reaches the endpoint ehhh... how though
     def consider_activation(self):
         # the behavior is only active when following a line
-        if not self.line_r_sensob:
-            self.active_flag = True
+        ZumoButton().wait_for_press()
+        self.active_flag = True
+        #if self.line_r_sensob:
+         #   self.active_flag = True
 
 
     # should be deactivated when it reaches the endpoint
@@ -174,6 +176,9 @@ class FollowLine(Behavior):
         if self.end_r_sensob:
             self.active_flag = False
             self.halt_request = True
+
+        if not self.line_r_sensob:
+
 
 
     def update(self):
@@ -189,19 +194,19 @@ class FollowLine(Behavior):
 
     def sense_and_act(self):
         # Drives straight forward if the line is under sensor 3-4
-        if()
+        if(self.line_r_sensob.get_value() == 2 or self.line_r_sensob.get_value() == 3):
             self.motor_recommendations["goForward"]
             self.priority = 0.6
             self.match_degree = 0.5
 
         # Drives left if the line is under sensor 1,2 maybe 3
-        elif()
+        elif(self.line_r_sensob.get_value() == 0 or self.line_r_sensob.get_value() == 1):
             self.motor_recommendations["turnLeft", degree]
             self.priority = 0.6
             self.match_degree = 0.5
 
         # Drives right if the line is under sensor 5, 6 maybe 4
-        elif()
+        elif(self.line_r_sensob.get_value() == 4 or self.line_r_sensob.get_value() == 5):
             self.motor_recommendations["turnRight", degree]
             self.priority = 0.6
             self.match_degree = 0.5
@@ -214,6 +219,7 @@ class RedDetector(Behavior):
         self.name = "Red detector"
         self.c_sensob = CameraSensob()
         self.sensobs.append(self.c_sensob)
+
 
     def consider_activation(self):
         if self.c_sensob.get_value()[0]:
@@ -241,15 +247,18 @@ class RedDetector(Behavior):
     def sense_and_act(self):
         if(self.c_sensob.get_value()[1] > -0.3 and self.c_sensob.get_value()[1] < 0.3):
             self.motor_recommendations["goForward"]
+            self.priority = 0.5
+            self.match_degree = 0.5
 
         elif self.c_sensob.get_value()[1] < -0.3:
             self.motor_recommendations["turnLeft", degree]
+            self.priority = 0.5
+            self.match_degree = 0.5
 
         elif self.c_sensob.get_value()[1] > 0.3:
             self.motor_recommendations["turnRight", degree]
-
-        self.priority = 0.5
-        self.match_degree = 0.5
+            self.priority = 0.5
+            self.match_degree = 0.5
 
 
 
