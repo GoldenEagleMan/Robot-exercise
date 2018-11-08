@@ -99,12 +99,17 @@ class CameraSensob(Sensob):
     def update(self):
         self.sensor.reset
         self.value = self.interpret_image()
+        '''
+        value is a tuple consisting of a bool (whether the picture is red or not) and
+        a number between -1 and 1 that represents the direction of the redness
+        '''
 
     def interpret_image(self):
         camera = self.sensor
         camera.update()
         image = camera.value # the matrix of pixels
         occurrence_array = [0 for i in range(128)]
+        pixel_counter = 0 # counts the amount of red pixels
 
         for h in range(camera.img_height):
             for w in range(camera.img_width):
@@ -112,8 +117,16 @@ class CameraSensob(Sensob):
                 r, g, b = pixel[0], pixel[1], pixel[2]
                 if r >= 180 and g < 45 and b < 45:
                     occurrence_array[w] += 1
+                    pixel_counter += 1
 
-        return (CameraSensob.max_index(occurrence_array) - camera.img_width)/camera.img_width #returns a value between -1 and 1
+        direction = (CameraSensob.max_index(occurrence_array) - camera.img_width)/camera.img_width
+        redness = pixel_counter/(camera.img_width*camera.img_height)
+        threshold = 0.10  # how many percent of red pixels that is needed to be considered red
+        if redness > threshold:
+            return (True, direction)
+        else:
+            return (False, direction)
+
 
     @staticmethod
     def max_index(list):
