@@ -97,10 +97,12 @@ class CameraSensob(Sensob):
         super(CameraSensob, self).__init__(camera)
 
     def update(self):
+        self.sensor.reset
         self.value = self.interpret_image()
 
     def interpret_image(self):
         camera = self.sensor
+        camera.update()
         image = camera.value # the matrix of pixels
         occurrence_array = [0 for i in range(128)]
 
