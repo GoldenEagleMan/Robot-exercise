@@ -39,6 +39,8 @@ class UltrasoundSensob(Sensob):
     def __init__(self):
         ultra = Ultrasonic()
         super().__init__(ultra)
+        self.threshold = 0.05
+
 
     def update(self):
         self.value = int(self.sensor.get_value() * 10) #cm to mm
@@ -64,10 +66,9 @@ class LineDetectionSensob(ReflectanceBoardSensob):
         super().__init__()
 
     def update(self):
-        threshold = 0.05
         red_values = self.sensor.get_value()
         for value in red_values:
-            if value <= threshold :
+            if value <= self.threshold:
                 self.value = True
         self.value = False
 
@@ -78,10 +79,9 @@ class EndpointDetectionSensob(ReflectanceBoardSensob):
         super().__init__()
 
     def update(self):
-        threshold = 0.05
         red_values = self.sensor.get_value()
         for value in red_values:
-            if value - threshold > 0:
+            if value - self.threshold > 0:
                 self.value = False
         self.value = True
 
