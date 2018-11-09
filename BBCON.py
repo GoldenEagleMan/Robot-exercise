@@ -95,18 +95,18 @@ class BBCON:
 
 
     def print_info_to_console(self):
-        print("******************************")
-        print("******* Sensors Values *******")
+        print("****************************************************")
+        print("**************** Sensors Values ********************")
         for sensor in self.sensors:
             print(sensor.__class__.__name__ + ": " + str(sensor.get_value()))
-        print("******* Sensobs Values *******")
+        print("**************** Sensobs Values ********************")
         for sensob in self.sensobs:
             print(sensob.__class__.__name__ + ": " + str(sensob.get_value()))
-        print("****** Active Behaviors ******")
+        print("*************** Active Behaviors *******************")
         for behavior in self.active_behaviors:
             print(behavior.__class__.__name__)
-        print("*** Active recommendation ****")
+        print("************ Active recommendation *****************")
         print(self.run_behavior)
-        print("******************************")
+        print("****************************************************")
 
 
