@@ -9,7 +9,7 @@ class BBCON:
         self.active_sensors = []
         self.arbitrator = arbitrator
         self.run_behavior = None
-        self.sensors = None
+        self.sensors = []
 
 
     def run_one_timestep(self):
