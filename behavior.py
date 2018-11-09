@@ -177,8 +177,6 @@ class FollowLine(Behavior):
             self.active_flag = False
             self.halt_request = True
 
-        if not self.line_r_sensob:
-
 
 
     def update(self):
@@ -201,17 +199,18 @@ class FollowLine(Behavior):
 
         # Drives left if the line is under sensor 1,2 maybe 3
         elif(self.line_r_sensob.get_value() == 0 or self.line_r_sensob.get_value() == 1):
-            self.motor_recommendations["turnLeft", degree]
+            self.motor_recommendations["turnLeft", -10]
             self.priority = 0.6
             self.match_degree = 0.5
 
         # Drives right if the line is under sensor 5, 6 maybe 4
         elif(self.line_r_sensob.get_value() == 4 or self.line_r_sensob.get_value() == 5):
-            self.motor_recommendations["turnRight", degree]
+            self.motor_recommendations["turnRight", 10]
             self.priority = 0.6
             self.match_degree = 0.5
 
 
+# This behavior will drive towards a red area, and will only activate if there is enough red caught up by the camera
 class RedDetector(Behavior):
 
     def __init__(self, BBCON, sensobs, priority):
@@ -228,7 +227,7 @@ class RedDetector(Behavior):
 
 
     def consider_deactivation(self):
-        if not self.c_sensob.get_value():
+        if not self.c_sensob.get_value()[0]:
             self.active_flag = False
 
 
@@ -251,12 +250,12 @@ class RedDetector(Behavior):
             self.match_degree = 0.5
 
         elif self.c_sensob.get_value()[1] < -0.3:
-            self.motor_recommendations["turnLeft", degree]
+            self.motor_recommendations["turnLeft", -10]
             self.priority = 0.5
             self.match_degree = 0.5
 
         elif self.c_sensob.get_value()[1] > 0.3:
-            self.motor_recommendations["turnRight", degree]
+            self.motor_recommendations["turnRight", 10]
             self.priority = 0.5
             self.match_degree = 0.5
 
