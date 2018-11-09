@@ -10,8 +10,8 @@ class BBCON:
         self.arbitrator = arbitrator
         self.run_behavior = None
         self.sensors = None
-        for sensor in self.sensobs:
-            self.activate_sensor(sensor)
+        for sensob in self.sensobs:
+            self.activate_sensor(sensob.sensor)
 
     def run_one_timestep(self):
         self.compile_objects_list()
