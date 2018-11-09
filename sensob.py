@@ -45,6 +45,7 @@ class UltrasoundSensob(Sensob):
 
 
     def update(self):
+        print(self.sensor.get_value())
         self.value = int(self.sensor.get_value() * 10) #cm to mm
 
 

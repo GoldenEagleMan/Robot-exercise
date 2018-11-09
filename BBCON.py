@@ -12,6 +12,10 @@ class BBCON:
 
     def run_one_timestep(self):
         self.compile_objects_list()
+        print("active behaviors: " + str(self.active_behaviors))
+        print("active sensobs: " + str(self.active_sensobs))
+        print("active sensors: " + str(self.active_sensors))
+
         self.update_objects()
         #invoke arbitrator.
         self.arbitrator.choose_action()
