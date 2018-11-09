@@ -59,7 +59,7 @@ class BBCON:
         self.active_behaviors = []
         for behavior in self.behaviors:
             if behavior.active_flag:
-                self.active_behaviors = behavior
+                self.active_behaviors.append(behavior)
 
         # construct active sensobs list
         self.active_sensobs = []
