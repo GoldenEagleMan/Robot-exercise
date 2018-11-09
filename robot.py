@@ -3,7 +3,7 @@ from behavior import *
 from sensob import *
 from motob import Motob
 from arbitrator import Arbitrator
-
+from plab.zumo_button import *
 
 class Robot:
 
@@ -20,6 +20,8 @@ class Robot:
 
     def run(self):
         run = True
+        print("Press the button to start the robot")
+        ZumoButton().wait_for_press()
         while run:
             run = self.controller.run_one_timestep()
 
