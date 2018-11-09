@@ -33,6 +33,7 @@ class ReflectanceBoardSensob(Sensob):#0 svart 1 hvit
 
     def __init__(self):
         super().__init__(ReflectanceBoardSensob.reflectance_board)
+        self.threshold = 0.05
 
 
 class UltrasoundSensob(Sensob):
@@ -41,7 +42,7 @@ class UltrasoundSensob(Sensob):
 
     def __init__(self):
         super().__init__(UltrasoundSensob.ultra)
-        self.threshold = 0.05
+
 
     def update(self):
         self.value = int(self.sensor.get_value() * 10) #cm to mm
@@ -99,7 +100,7 @@ class CameraSensob(Sensob):
         super().__init__(camera)
 
     def update(self):
-        self.sensor.reset
+        self.sensor.reset()
         self.value = self.interpret_image()
         '''
         value is a tuple consisting of a bool (whether the picture is red or not) and
