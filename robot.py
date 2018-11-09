@@ -16,6 +16,7 @@ class Robot:
         self.arbitrator.bbcon = self.controller
         self.build_sensob_and_behavior_list()
         self.connect_behaviors_and_sensobs_to_controller()
+        self.controller.construct_sensors()
 
     def run(self):
         run = True
