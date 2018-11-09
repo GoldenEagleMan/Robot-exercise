@@ -20,7 +20,6 @@ class Behavior:
         self.match_degree = None
         self.weight = None
         self.name = ""
-
     @abstractclassmethod
     def consider_deactivation(self):
         # when active, consider if the behavior should be deactivated
@@ -61,7 +60,7 @@ class CollisionDetection(Behavior):
     def __init__(self, BBCON, sensobs, priority):
         super(CollisionDetection, self).__init__(BBCON, sensobs, priority)
         self.name = "Collision detection"
-        self.u_sensob = sensobs
+        self.u_sensob = sensobs[0]
         self.distance = 50  # 50mm
 
     def consider_activation(self):
@@ -195,7 +194,7 @@ class RedDetector(Behavior):
     def __init__(self, BBCON, sensobs, priority):
         super(RedDetector, self).__init__(BBCON, sensobs, priority)
         self.name = "Red detector"
-        self.c_sensob = sensobs
+        self.c_sensob = sensobs[0]
 
     def consider_activation(self):
         if self.c_sensob.get_value()[0]:
