@@ -82,13 +82,13 @@ class EndpointDetectionSensob(ReflectanceBoardSensob):
 class IRSensobLeft(IRSensob):
 
     def update(self):
-        self.value = self.sensor.get_value()[0] #0,1 left and right? right and left?
+       # self.value = self.sensor.get_value()[0] #0,1 left and right? right and left?
 
 
 class IRSensobRight(IRSensob):
 
     def update(self):
-        self.value = self.sensor.get_value()[1]
+       # self.value = self.sensor.get_value()[1]
 
 
 class CameraSensob(Sensob):
