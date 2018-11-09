@@ -10,15 +10,25 @@ class Robot:
     def __init__(self):
         arbitrator = Arbitrator(self)
         motob = Motob()
-        self.controller = BBCON(Robot.build_behavior_list(), Robot.build_sensob_list(), motob, arbitrator)
+        self.sensobs = None
+        self.behaviors = None
+        self.controller = BBCON(motob, arbitrator)
+        self.build_sensob_and_behavior_list()
+        self.connect_behaviors_and_sensobs_to_controller()
 
     def run(self):
         run = True
         while run:
             run = self.controller.run_one_timestep()
 
-    @staticmethod
-    def build_sensob_list():
+    def connect_behaviors_and_sensobs_to_controller(self):
+        for sensob in self.sensobs:
+            self.controller.sensobs.append(sensob)
+        for behavior in self.behaviors:
+            self.controller.behaviors.append(behavior)
+        pass
+
+    def build_sensob_and_behavior_list(self):
         cameraSensob = CameraSensob()
         irSensobRight = IRSensobRight()
         irSensobLeft = IRSensobLeft()
@@ -27,13 +37,13 @@ class Robot:
         lineFollowingSensob = LineFollowingSensob()
         ultrasoundSensob = UltrasoundSensob()
 
-        return [cameraSensob, irSensobRight, irSensobLeft, endpointDetectionSensob, lineDetectionSensob,
+        self.sensobs = [cameraSensob, irSensobRight, irSensobLeft, endpointDetectionSensob, lineDetectionSensob,
                    lineFollowingSensob, ultrasoundSensob]
-    @staticmethod
-    def build_behavior_list():
-        collisionDetectionBehavior = CollisionDetection()
-        goAroundObjectBehavior = GoAroundObject()
-        followLineBehavior = FollowLine()
-        redDetectorBehavior = RedDetector()
 
-        return [collisionDetectionBehavior, goAroundObjectBehavior, followLineBehavior, redDetectorBehavior]
+        collisionDetectionBehavior = CollisionDetection(self.controller, ultrasoundSensob, 1)
+        goAroundObjectBehavior = GoAroundObject(self.controller, [irSensobLeft, irSensobRight], 1)
+        followLineBehavior = FollowLine(self.controller, [lineFollowingSensob, endpointDetectionSensob, lineDetectionSensob], 1)
+        redDetectorBehavior = RedDetector(self.controller, cameraSensob, 1)
+
+        self.behaviors = [collisionDetectionBehavior, goAroundObjectBehavior, followLineBehavior, redDetectorBehavior]
+

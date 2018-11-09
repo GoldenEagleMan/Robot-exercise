@@ -1,8 +1,8 @@
 class BBCON:
 #hallobois spam
-    def __init__(self, behaviors, sensobs, motobs, arbitrator):
-        self.behaviors = behaviors
-        self.sensobs = sensobs
+    def __init__(self, motobs, arbitrator):
+        self.behaviors = []
+        self.sensobs = []
         self.motobs = motobs
         self.active_behaviors = []
         self.active_sensobs = []
