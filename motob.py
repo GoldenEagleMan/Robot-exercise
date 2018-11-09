@@ -9,6 +9,7 @@ class Motob:
 
     def decodeMR(self, motor_recommendation): #in form ("command", angle)
         print("Decoding motor recommendation...")
+        print("Speed is " + str(Motob.angle_to_speed(motor_recommendation[1])))
         command = motor_recommendation[0]
         angle = motor_recommendation[1]
         if command == "goForward":
