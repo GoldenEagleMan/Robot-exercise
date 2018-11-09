@@ -55,7 +55,7 @@ class BBCON:
 
     def activate_sensor(self, sensor):
         if sensor not in self.active_sensors:
-            self.active_sensors.append(sensor)
+            self.sensors.append(sensor)
 
     def compile_objects_list(self):
 
