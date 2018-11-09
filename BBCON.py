@@ -21,6 +21,7 @@ class BBCON:
         #reset all sensob
         for sensob in self.active_sensobs:
             sensob.reset()
+        return True
 
     def add_behavior(self, behavior):
         self.behaviors.append(behavior)
@@ -79,6 +80,9 @@ class BBCON:
             behavior.update()
 
     def end_program(self):
-        pass
+        self.motobs.decodeMR(("stopAllMotors", 0))
+        return False
+
+
 
 

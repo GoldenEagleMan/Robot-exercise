@@ -31,7 +31,7 @@ class ReflectanceBoardSensob(Sensob):#0 svart 1 hvit
 
     reflectance_board = ReflectanceSensors()
 
-    def __init__(self):s
+    def __init__(self):
         super().__init__(ReflectanceBoardSensob.reflectance_board)
 
 
