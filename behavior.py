@@ -13,7 +13,7 @@ class Behavior:
         self.BBCON = BBCON
         self.sensobs = sensobs
         self.motor_recommendations = None
-        self.active_flag = False
+        self.active_flag = True
         self.halt_request = False
         # halt request not yet implemented
         self.priority = priority
