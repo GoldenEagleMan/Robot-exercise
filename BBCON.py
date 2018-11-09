@@ -14,14 +14,15 @@ class BBCON:
 
     def run_one_timestep(self):
         self.compile_objects_list()
-        print("active behaviors: " + str(self.active_behaviors))
+        #print("active behaviors: " + str(self.active_behaviors))
         #print("active sensobs: " + str(self.active_sensobs))
         #print("active sensors: " + str(self.active_sensors))
 
         self.update_objects()
         #invoke arbitrator.
         self.arbitrator.choose_action()
-        print("arbitrator chooses: " + str(self.run_behavior[0]))
+        #print("arbitrator chooses: " + str(self.run_behavior[0]))
+        self.print_info_to_console()
         if self.run_behavior[1]:
             self.end_program()
         self.motobs.decodeMR(self.run_behavior[0])
@@ -93,5 +94,19 @@ class BBCON:
         return False
 
 
+    def print_info_to_console(self):
+        print("******************************")
+        print("******* Sensors Values *******")
+        for sensor in self.sensors:
+            print(sensor.__class__.__name__ + ": " + str(sensor.get_value()))
+        print("******* Sensobs Values *******")
+        for sensob in self.sensobs:
+            print(sensob.__class__.__name__ + ": " + str(sensob.get_value()))
+        print("****** Active Behaviors ******")
+        for behavior in self.active_behaviors:
+            print(behavior.__class__.__name__)
+        print("*** Active recommendation ****")
+        print(self.run_behavior)
+        print("******************************")
 
 
