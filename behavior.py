@@ -63,7 +63,6 @@ class CollisionDetection(Behavior):
         self.name = "Collision detection"
         self.u_sensob = sensobs
         self.distance = 50  # 50mm
-        #self.sensobs.append(self.u_sensob)
 
     def consider_activation(self):
         # Collision detection will be/remain activated, if an object is close,
@@ -197,7 +196,6 @@ class RedDetector(Behavior):
         super(RedDetector, self).__init__(BBCON, sensobs, priority)
         self.name = "Red detector"
         self.c_sensob = sensobs
-        self.sensobs.append(self.c_sensob)
 
     def consider_activation(self):
         if self.c_sensob.get_value()[0]:
