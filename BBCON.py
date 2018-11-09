@@ -104,7 +104,7 @@ class BBCON:
             print(sensob.__class__.__name__ + ": " + str(sensob.get_value()))
         print("*************** Active Behaviors *******************")
         for behavior in self.active_behaviors:
-            print(behavior.__class__.__name__)
+            print(behavior.__class__.__name__ + ": " + str(behavior.weight))
         print("************ Active recommendation *****************")
         print(self.run_behavior)
         print("****************************************************")
