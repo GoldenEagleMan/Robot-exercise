@@ -1,3 +1,5 @@
+from sensob import CameraSensob
+
 class BBCON:
 #hallobois spam
     def __init__(self, motobs, arbitrator):
@@ -81,11 +83,17 @@ class BBCON:
 '''
     def update_objects(self):
         #update all sensors, sensobs and behaviors
+        camera_sensob = None
         for sensor in self.sensors:
             sensor.reset()
             sensor.update()
         for sensob in self.sensobs:
-            sensob.update()
+            if not isinstance(sensob, CameraSensob):
+                sensob.update()
+            else:
+                camera_sensob = sensob
+        if self.behaviors[3].active_flag:
+            camera_sensob.update()
         for behavior in self.behaviors:
             behavior.update()
 

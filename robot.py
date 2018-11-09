@@ -47,7 +47,7 @@ class Robot:
         collisionDetectionBehavior = CollisionDetection(self.controller, [ultrasoundSensob], 1)
         goAroundObjectBehavior = GoAroundObject(self.controller, [irSensobLeft, irSensobRight], 1)
         followLineBehavior = FollowLine(self.controller, [lineFollowingSensob, endpointDetectionSensob, lineDetectionSensob], 1)
-        redDetectorBehavior = RedDetector(self.controller, [cameraSensob], 1)
+        redDetectorBehavior = RedDetector(self.controller, [cameraSensob, endpointDetectionSensob], 1)
 
         self.behaviors = [collisionDetectionBehavior, goAroundObjectBehavior, followLineBehavior, redDetectorBehavior]
 

@@ -195,6 +195,8 @@ class RedDetector(Behavior):
         super(RedDetector, self).__init__(BBCON, sensobs, priority)
         self.name = "Red detector"
         self.c_sensob = sensobs[0]
+        self.end_of_line = sensobs[1]
+        self.second_demo = False
 
     def consider_activation(self):
         if self.c_sensob.get_value()[0]:
@@ -203,16 +205,20 @@ class RedDetector(Behavior):
     def consider_deactivation(self):
         if not self.c_sensob.get_value()[0]:
             self.active_flag = False
+            self.second_demo = False
 
     def update(self):
-        if self.active_flag:
-            self.consider_deactivation()
+        if self.end_of_line.get_value():
+            self.second_demo = True
+        if self.second_demo:
+            if self.active_flag:
+                self.consider_deactivation()
 
-        else:
-            self.consider_activation()
+            else:
+                self.consider_activation()
 
-        self.sense_and_act()
-        self.weight = self.priority * self.match_degree
+            self.sense_and_act()
+            self.weight = self.priority * self.match_degree
 
     # this behavior will give motor_recommendations such that it will turn left if it receives a negative number
     #  and right with a positive number if the number exceeds/fall under a certain value
