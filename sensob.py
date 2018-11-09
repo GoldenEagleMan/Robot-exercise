@@ -83,13 +83,13 @@ class IRSensobLeft(IRSensob):
 
     def update(self):
        # self.value = self.sensor.get_value()[0] #0,1 left and right? right and left?
-
+        pass
 
 class IRSensobRight(IRSensob):
 
     def update(self):
        # self.value = self.sensor.get_value()[1]
-
+        pass
 
 class CameraSensob(Sensob):
 
