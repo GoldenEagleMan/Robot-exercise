@@ -56,11 +56,10 @@ class BBCON:
     def compile_objects_list(self):
 
         # construct active behaviors list
+        self.active_behaviors = []
         for behavior in self.behaviors:
             if behavior.active_flag:
-                self.activate_behavior(behavior)
-            else:
-                self.deactivate_behavior(behavior)
+                self.active_behaviors = behavior
 
         # construct active sensobs list
         self.active_sensobs = []
@@ -71,7 +70,7 @@ class BBCON:
         # construct active sensor list
         self.active_sensors = []
         for sensob in self.active_sensobs:
-            self.activate_sensor(sensob.sensors)
+            self.activate_sensor(sensob.sensor)
 
     def update_objects(self):
         #update all sensors, sensobs and behaviors

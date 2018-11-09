@@ -5,9 +5,9 @@ from plab.camera import *
 
 class Sensob:
 
-    def __init__(self, sensors):
+    def __init__(self, sensor):
         self.value = None
-        self.sensor = sensors  #1 sensor or list of used sensors
+        self.sensor = sensor  #1 sensor or list of used sensors
 
     def update(self):
         pass
