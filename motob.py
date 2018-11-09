@@ -8,19 +8,24 @@ class Motob:
         self.motors = motors
 
     def decodeMR(self, motor_recommendation): #in form ("command", angle)
-        print("Decoding motor recommendation...")
-        print("Speed is " + str(Motob.angle_to_speed(motor_recommendation[1])))
+
         command = motor_recommendation[0]
+        speed = Motob.angle_to_speed(motor_recommendation[1])
         angle = motor_recommendation[1]
+
+        print("Decoding motor recommendation...")
+        print("Speed is " + str(speed))
+
         if command == "goForward":
-            self.motors.forward(self.angle_to_speed(angle), 3)
+            self.motors.forward(speed, 3)
         elif command == "turn":
+            print("turning")
             if angle > 0:
-                self.motors.right(self.angle_to_speed(angle), 3)
+                self.motors.right(speed, 3)
             else:
-                self.motors.left(self.angle_to_speed(angle), 3)
+                self.motors.left(speed, 3)
         elif command == "goBackward":
-            self.motors.backward(self.angle_to_speed(angle), 3)
+            self.motors.backward(speed, 3)
         elif command == "stopAllMotors":
             self.motors.stop()
         pass
