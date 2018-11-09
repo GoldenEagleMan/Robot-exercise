@@ -9,12 +9,15 @@ class BBCON:
         self.active_sensors = []
         self.arbitrator = arbitrator
         self.run_behavior = None
+        self.sensors = None
+        for sensor in self.sensobs:
+            self.activate_sensor(sensor)
 
     def run_one_timestep(self):
         self.compile_objects_list()
         print("active behaviors: " + str(self.active_behaviors))
-        print("active sensobs: " + str(self.active_sensobs))
-        print("active sensors: " + str(self.active_sensors))
+        #print("active sensobs: " + str(self.active_sensobs))
+        #print("active sensors: " + str(self.active_sensors))
 
         self.update_objects()
         #invoke arbitrator.
@@ -61,7 +64,7 @@ class BBCON:
         for behavior in self.behaviors:
             if behavior.active_flag:
                 self.active_behaviors.append(behavior)
-
+                '''
         # construct active sensobs list
         self.active_sensobs = []
         for behavior in self.active_behaviors:
@@ -72,15 +75,15 @@ class BBCON:
         self.active_sensors = []
         for sensob in self.active_sensobs:
             self.activate_sensor(sensob.sensor)
-
+'''
     def update_objects(self):
         #update all sensors, sensobs and behaviors
-        for sensor in self.active_sensors:
+        for sensor in self.sensors:
             sensor.reset()
             sensor.update()
-        for sensob in self.active_sensobs:
+        for sensob in self.sensobs:
             sensob.update()
-        for behavior in self.active_behaviors:
+        for behavior in self.behaviors:
             behavior.update()
 
     def end_program(self):
