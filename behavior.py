@@ -18,7 +18,7 @@ class Behavior:
         # halt request not yet implemented
         self.priority = priority
         self.match_degree = None
-        self.weight = None
+        self.weight = 0
         self.name = ""
     @abstractclassmethod
     def consider_deactivation(self):

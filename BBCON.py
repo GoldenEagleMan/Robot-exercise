@@ -19,6 +19,7 @@ class BBCON:
         self.update_objects()
         #invoke arbitrator.
         self.arbitrator.choose_action()
+        print("arbitrator chooses: " + str(self.run_behavior[0]))
         if self.run_behavior[1]:
             self.end_program()
         self.motobs.decodeMR(self.run_behavior[0])
@@ -77,7 +78,7 @@ class BBCON:
         for sensor in self.active_sensors:
             sensor.reset()
             sensor.update()
-        for sensob in self.sensobs:
+        for sensob in self.active_sensobs:
             sensob.update()
         for behavior in self.active_behaviors:
             behavior.update()
