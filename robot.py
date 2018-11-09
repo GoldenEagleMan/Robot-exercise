@@ -8,11 +8,12 @@ from arbitrator import Arbitrator
 class Robot:
 
     def __init__(self):
-        arbitrator = Arbitrator(self)
+        self.arbitrator = Arbitrator()
         motob = Motob()
         self.sensobs = None
         self.behaviors = None
-        self.controller = BBCON(motob, arbitrator)
+        self.controller = BBCON(motob, self.arbitrator)
+        self.arbitrator.bbcon = self.controller
         self.build_sensob_and_behavior_list()
         self.connect_behaviors_and_sensobs_to_controller()
 

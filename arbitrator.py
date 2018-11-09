@@ -1,6 +1,6 @@
 class Arbitrator:
-    def __init__(self, bbcon):
-        self.bbcon = bbcon
+    def __init__(self):
+        self.bbcon = None
 
     def choose_action(self):
         #active_behaviors = filter(lambda x: x.active_flag == True, self.bbcon.behaviors)
