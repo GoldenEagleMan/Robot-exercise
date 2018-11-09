@@ -115,7 +115,7 @@ class CameraSensob(Sensob):
 
         for h in range(camera.img_height):
             for w in range(camera.img_width):
-                pixel = image.getpixel(w,h)
+                pixel = image.getpixel((w, h))
                 r, g, b = pixel[0], pixel[1], pixel[2]
                 if r >= 180 and g < 45 and b < 45:
                     occurrence_array[w] += 1
