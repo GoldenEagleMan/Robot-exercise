@@ -60,8 +60,6 @@ class Behavior:
 # REMEMBER TO REMOVE IR-SENSOBS FROM THIS CLASS
 class CollisionDetection(Behavior):
     def __init__(self, BBCON, sensobs, priority):
-
-
         super(CollisionDetection, self).__init__(BBCON, sensobs, priority)
         self.name = "Collision detection"
         self.u_sensob = Ultrasonic()
@@ -158,22 +156,25 @@ class FollowLine(Behavior):
         self.name = "Go around object"
         self.line_r_sensob = LineFollowingSensob()
         self.end_r_sensob = EndpointDetectionSensob()
+        self.det_r_sensob = LineDetectionSensob()
         self.sensobs.append(self.end_r_sensob)
         self.sensobs.append(self.line_r_sensob)
+        self.sensobs.append(self.det_r_sensob)
 
 
     # Should be activated from the start and should remain activated until it reaches the endpoint ehhh... how though
     def consider_activation(self):
+        # the behavior is active when following a line, and deactivates when it
+        if self.det_r_sensob.get_value():
+            self.active_flag = True
         # the behavior is only active when following a line
-        ZumoButton().wait_for_press()
-        self.active_flag = True
         #if self.line_r_sensob:
          #   self.active_flag = True
 
 
     # should be deactivated when it reaches the endpoint
     def consider_deactivation(self):
-        if self.end_r_sensob:
+        if self.end_r_sensob.get_value():
             self.active_flag = False
             self.halt_request = True
 
