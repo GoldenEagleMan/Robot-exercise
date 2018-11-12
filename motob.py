@@ -1,10 +1,10 @@
-from motors import *
+from motors import Motors
 
 
 class Motob:
 
     def __init__(self):
-        self.motors = Motors()
+        self.motor = Motors()
         self.value = None
 
     def update(self, motor_recommendation):
@@ -20,16 +20,17 @@ class Motob:
         print("Speed is " + str(speed))
 
         if command == "goForward":
-            self.motors.set_value([speed, speed])
+            self.motor.set_value([speed, speed])
         elif command == "turn":
             print("turning")
             if angle > 0:
-                self.motors.set_value([0.25, speed])
+                self.motor.set_value((0.25, speed))
+
             else:
-                self.motors.set_value([speed, 0.25])
+                self.motor.set_value((speed, 0.25))
         elif command == "goBackward":
-            self.motors.set_value([- speed, - speed])
+            self.motor.set_value((- speed, - speed))
         elif command == "stopAllMotors":
-            self.motors.stop()
+            self.motor.stop()
         else:
             print("Unable to decode command")

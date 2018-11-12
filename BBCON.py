@@ -1,15 +1,19 @@
 from sensob import CameraSensob
+from motob import Motob
+from arbitrator import Arbitrator
+
 
 class BBCON:
 
-    def __init__(self, motobs, arbitrator):
+    def __init__(self):
         self.behaviors = []
         self.sensobs = []
-        self.motobs = motobs
+        self.motobs = Motob()
         self.active_behaviors = []
         self.active_sensobs = []
         self.active_sensors = []
-        self.arbitrator = arbitrator
+        self.arbitrator = Arbitrator()
+        self.arbitrator.bbcon = self
         self.run_behavior = None
         self.sensors = []
 
@@ -27,6 +31,7 @@ class BBCON:
         for sensob in self.active_sensobs:
             sensob.reset()
         return True
+
     def construct_sensors(self):
         for sensob in self.sensobs:
             self.activate_sensor(sensob.sensor)

@@ -1,19 +1,14 @@
 from BBCON import BBCON
 from behavior import *
 from sensob import *
-from motob import Motob
-from arbitrator import Arbitrator
 from zumo_button import *
 
 class Robot:
 
     def __init__(self):
-        self.arbitrator = Arbitrator()
-        motob = Motob()
         self.sensobs = None
         self.behaviors = None
-        self.controller = BBCON(motob, self.arbitrator)
-        self.arbitrator.bbcon = self.controller
+        self.controller = BBCON()
         self.build_sensob_and_behavior_list()
         self.connect_behaviors_and_sensobs_to_controller()
         self.controller.construct_sensors()
