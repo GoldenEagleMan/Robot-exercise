@@ -7,7 +7,7 @@ class Sensob:
 
     def __init__(self, sensor):
         self.value = None
-        self.sensor = sensor  #1 sensor or list of used sensors
+        self.sensor = sensor #1 sensor or list of used sensors
 
     def update(self):
         pass
@@ -20,7 +20,7 @@ class Sensob:
         return self.value
 
 
-class IRSensob(Sensob):
+'''class IRSensob(Sensob):
     ir_sensor = IRProximitySensor()
 
     def __init__(self):
@@ -33,23 +33,17 @@ class ReflectanceBoardSensob(Sensob):#0 svart 1 hvit
 
     def __init__(self):
         super().__init__(ReflectanceBoardSensob.reflectance_board)
-        self.threshold = 0.05
+        self.threshold = 0.05'''
 
 
 class UltrasoundSensob(Sensob):
-
-    ultra = Ultrasonic()
-
-    def __init__(self):
-        super().__init__(UltrasoundSensob.ultra)
-
 
     def update(self):
         #print(self.sensor.get_value())
         self.value = int(self.sensor.get_value() * 10) #cm to mm
 
 
-class LineFollowingSensob(ReflectanceBoardSensob):
+class LineFollowingSensob(Sensob):
 
     def update(self):
         red_values = self.sensor.get_value()
@@ -61,33 +55,33 @@ class LineFollowingSensob(ReflectanceBoardSensob):
         self.value = values_and_sensors.get(red_values[0])
 
 
-class LineDetectionSensob(ReflectanceBoardSensob):
+class LineDetectionSensob(Sensob):
 
     def update(self):
         red_values = self.sensor.get_value()
         for value in red_values:
-            if value <= self.threshold:
+            if value <= 0.1:
                 self.value = True
         self.value = False
 
 
-class EndpointDetectionSensob(ReflectanceBoardSensob):
+class EndpointDetectionSensob(Sensob):
 
     def update(self):
         red_values = self.sensor.get_value()
         for value in red_values:
-            if value - self.threshold > 0:
+            if value - 0.1 > 0:
                 self.value = False
         self.value = True
 
 
-class IRSensobLeft(IRSensob):
+class IRSensobLeft(Sensob):
 
     def update(self):
         self.value = self.sensor.get_value()[0] #0,1 left and right? right and left?
         pass
 
-class IRSensobRight(IRSensob):
+class IRSensobRight(Sensob):
 
     def update(self):
         self.value = self.sensor.get_value()[1]
@@ -95,8 +89,7 @@ class IRSensobRight(IRSensob):
 
 class CameraSensob(Sensob):
 
-    def __init__(self):
-        camera = Camera(128, 30)
+    def __init__(self, camera):
         self.match_degree = 0
         super().__init__(camera)
 

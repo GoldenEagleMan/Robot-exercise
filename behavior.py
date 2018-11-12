@@ -156,7 +156,7 @@ class FollowLine(Behavior):
     def consider_deactivation(self):
         if self.end_r_sensob.get_value():
             self.active_flag = False
-            self.halt_request = True
+            #self.halt_request = True
 
     def update(self):
         if self.active_flag:

@@ -1,5 +1,8 @@
-from robot import Robot
+from BBCON import BBCON
+from zumo_button import *
 
 if __name__ == "__main__":
-    robot = Robot()
-    robot.run()
+    bbcon = BBCON()
+    print("Press the button to start the robot")
+    ZumoButton().wait_for_press()
+    bbcon.run()

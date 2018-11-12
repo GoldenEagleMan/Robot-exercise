@@ -18,19 +18,23 @@ class Motob:
 
         print("Decoding motor recommendation...")
         print("Speed is " + str(speed))
-
+        print(self.value)
         if command == "goForward":
-            self.motor.set_value([speed, speed])
+            self.motor.set_value((speed, speed))
+            #self.motor.forward(speed)
         elif command == "turn":
             print("turning")
             if angle > 0:
                 self.motor.set_value((0.25, speed))
-
+                #self.motor.left(speed)
             else:
                 self.motor.set_value((speed, 0.25))
+                #self.motor.right(speed)
         elif command == "goBackward":
             self.motor.set_value((- speed, - speed))
+            #self.motor.backward(speed)
         elif command == "stopAllMotors":
             self.motor.stop()
         else:
             print("Unable to decode command")
+        pass
