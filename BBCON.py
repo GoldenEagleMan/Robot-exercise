@@ -1,7 +1,7 @@
 from sensob import CameraSensob
 
 class BBCON:
-#hallobois spam
+
     def __init__(self, motobs, arbitrator):
         self.behaviors = []
         self.sensobs = []
@@ -22,7 +22,7 @@ class BBCON:
         self.print_info_to_console()
         if self.run_behavior[1]:
             self.end_program()
-        self.motobs.decodeMR(self.run_behavior[0])
+        self.motobs.update(self.run_behavior[0])
         #reset all sensob
         for sensob in self.active_sensobs:
             sensob.reset()
