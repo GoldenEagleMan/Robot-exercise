@@ -20,15 +20,15 @@ class Motob:
         print("Speed is " + str(speed))
 
         if command == "goForward":
-            self.motors.forward(speed)
+            self.motors.set_value([speed, speed])
         elif command == "turn":
             print("turning")
             if angle > 0:
-                self.motors.right(speed)
+                self.motors.set_value([0.25, speed])
             else:
-                self.motors.left(speed)
+                self.motors.set_value([speed, 0.25])
         elif command == "goBackward":
-            self.motors.backward(speed)
+            self.motors.set_value([- speed, - speed])
         elif command == "stopAllMotors":
             self.motors.stop()
         else:
