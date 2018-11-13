@@ -51,7 +51,6 @@ class Behavior:
         - Red detector
         '''
 
-
 # Collision detection behavior will avoid obstacles by driving around them
 # WILL SPLIT COLLISION DETECTION INTO 2 SEPARATE ONES: 1 WILL STEER AWAY FROM AN OBJECT
 # NAMED COLLISION DETECTION, THE OTHER ONE WILL GO AROUND THE OBJECT USING THE IR-SENSORS
@@ -61,46 +60,51 @@ class CollisionDetection(Behavior):
         super(CollisionDetection, self).__init__(BBCON, sensobs, priority)
         self.name = "Collision detection"
         self.u_sensob = sensobs[0]
+        self.r_ir = sensobs[1]
+        self.l_ir = sensobs[2]
+        self.line_det  = sensobs[3]
         self.distance = 50  # 50mm
 
     def consider_activation(self):
         # Collision detection will be/remain activated, if an object is close,
         # and whilst going around an object
-        if self.u_sensob.get_value() < self.distance:
+        if self.u_sensob.get_value() < self.distance or self.r_ir.get_value or self.l_ir.get_value or not self.line_det:
             self.active_flag = True
+            self.BBCON.activate_behavior(self)
 
     def consider_deactivation(self):
         # Collision detection will be/remain deactivated, if there is no object spotted through ultrasound
-        if self.u_sensob.get_value() > self.distance:  # the preferred distance will be calculated later
+        if self.u_sensob.get_value() > self.distance or not self.r_ir.get_value or not self.l_ir.get_value or self.line_det:  # the preferred distance will be calculated later
             self.BBCON.deactivate_behavior(self)
             self.active_flag = False
 
     def update(self):
-        for sensor in self.sensobs:
-            sensor.update()
+        self.consider_deactivation()
+        self.consider_activation()
 
         if self.active_flag:
-            self.consider_deactivation()
-
-        elif not self.active_flag:
-            self.consider_activation()
-
-        if not self.active_flag:
-            self.weight = 0
-            return
-
-        self.sense_and_act()
-        self.weight = self.priority * self.match_degree
+            self.sense_and_act()
+            self.weight = self.priority * self.match_degree
 
     def sense_and_act(self):
-        self.motor_recommendations = ["turn", -45]  # turns left # yet to be made, but will either pass the object on the left or right
+        if self.r_ir.get_value() and self.l_ir:
+            self.motor_recommendations = ["goBackward", 0]
+        elif self.r_ir.get_value():
+            self.motor_recommendations = ["turn", -20]  # turns left # yet to be made, but will either pass the object on the left or right
+        elif self.l_ir.get_value():
+            self.motor_recommendations = ["turn", 20]
+        elif self.u_sensob.get_value() < self.distance:
+            self.motor_recommendations = ["turn", -20]
+        else:
+            self.motor_recommendations = ["turn", 20]
+        
         self.priority = 1
         self.match_degree = 1
 
 
 # Go around object will be activated when collision detection has steered away from an object
 # Go around object will go around an object such that its final destination will be on the other side of the object
-class GoAroundObject(Behavior):
+'''class GoAroundObject(Behavior):
 
     def __init__(self, BBCON, sensobs, priority):
         super(GoAroundObject, self).__init__(BBCON, sensobs, priority)
@@ -131,7 +135,7 @@ class GoAroundObject(Behavior):
         self.priority = 0.7
         self.match_degree = 0.5
 
-
+'''
 # Follow line will follow a black line such that the line is in the middle of where the robot drives
 # This behavior will use the reflectance sensors on the robot
 class FollowLine(Behavior):
@@ -149,48 +153,37 @@ class FollowLine(Behavior):
         if self.det_r_sensob.get_value():
             self.active_flag = True
         # the behavior is only active when following a line
-        #if self.line_r_sensob:
-         #   self.active_flag = True
 
     # should be deactivated when it reaches the endpoint
     def consider_deactivation(self):
         if self.end_r_sensob.get_value():
             self.active_flag = False
-            #self.halt_request = True
 
     def update(self):
+        self.consider_deactivation()
+        self.consider_activation()
         if self.active_flag:
-            self.consider_deactivation()
-
-        else:
-            self.consider_activation()
-
-        self.sense_and_act()
-        self.weight = self.priority * self.match_degree
+            self.sense_and_act()
+            self.weight = self.priority * self.match_degree
 
     def sense_and_act(self):
         # Drives straight forward if the line is under sensor 3-4
         if self.line_r_sensob.get_value() == 2 or self.line_r_sensob.get_value() == 3:
             self.motor_recommendations = ["goForward", 0]
-            self.priority = 0.6
-            self.match_degree = 0.5
 
         # Drives left if the line is under sensor 1,2 maybe 3
         elif self.line_r_sensob.get_value() == 0 or self.line_r_sensob.get_value() == 1:
-            self.motor_recommendations = ["turn", 10]
-            self.priority = 0.6
-            self.match_degree = 0.5
+            self.motor_recommendations = ["turn", -10]
 
         # Drives right if the line is under sensor 5, 6 maybe 4
         elif self.line_r_sensob.get_value() == 4 or self.line_r_sensob.get_value() == 5:
-            self.motor_recommendations = ["turn", -10]
-            self.priority = 0.6
-            self.match_degree = 0.5
+            self.motor_recommendations = ["turn", 10]
 
+        self.priority = 0.6
+        self.match_degree = 0.5
 
 # This behavior will drive towards a red area, and will only activate if there is enough red caught up by the camera
 class RedDetector(Behavior):
-
     def __init__(self, BBCON, sensobs, priority):
         super(RedDetector, self).__init__(BBCON, sensobs, priority)
         self.name = "Red detector"
@@ -199,24 +192,20 @@ class RedDetector(Behavior):
         self.second_demo = False
 
     def consider_activation(self):
-        if self.c_sensob.get_value()[0]:
+        if self.second_demo:
             self.active_flag = True
 
     def consider_deactivation(self):
-        if not self.c_sensob.get_value()[0]:
+        if not self.second_demo:
             self.active_flag = False
-            self.second_demo = False
 
     def update(self):
         if self.end_of_line.get_value():
             self.second_demo = True
-        if self.second_demo:
-            if self.active_flag:
-                self.consider_deactivation()
+        self.consider_activation()
+        self.consider_deactivation()
 
-            else:
-                self.consider_activation()
-
+        if self.active_flag:
             self.sense_and_act()
             self.weight = self.priority * self.match_degree
 
@@ -225,18 +214,10 @@ class RedDetector(Behavior):
     def sense_and_act(self):
         if -0.3 < self.c_sensob.get_value()[1] < 0.3:
             self.motor_recommendations = ["goForward", 0]
-            self.priority = 0.5
-            self.match_degree = 0.5
-
-        elif self.c_sensob.get_value()[1] < -0.3:
-            self.motor_recommendations = ["turn", -10]
-            self.priority = 0.5
-            self.match_degree = 0.5
-
-        elif self.c_sensob.get_value()[1] > 0.3:
-            self.motor_recommendations = ["turn", 10]
-            self.priority = 0.5
-            self.match_degree = 0.5
+        else:
+            self.motor_recommendations = ["turn", self.c_sensob.get_value()[1] * 30]
+        self.priority = 0.5
+        self.match_degree = 0.5
 
 
 

@@ -24,7 +24,7 @@ class BBCON:
         self.run_behavior = None
 
     def run_one_timestep(self):
-        self.compile_active_behavior_list()
+        #self.compile_active_behavior_list()
         self.update_objects()
         #invoke arbitrator.
         self.arbitrator.choose_action()
@@ -65,7 +65,7 @@ class BBCON:
                 sensor.update()
             else:
                 camera_sensor = sensor
-        if self.behaviors[3].active_flag:
+        if self.behaviors[2].active_flag:
             camera_sensor.update()
 
         for sensob in self.sensobs:
@@ -118,12 +118,12 @@ class BBCON:
         self.sensobs = [camera_sensob, ir_sensob_right, ir_sensob_left, endpoint_detection_sensob, line_detection_sensob,
                    line_following_sensob, ultrasound_sensob]
 
-        collision_detection_behavior = CollisionDetection(self, [ultrasound_sensob], 1)
-        go_around_object_behavior = GoAroundObject(self, [ir_sensob_left, ir_sensob_right], 1)
+        collision_detection_behavior = CollisionDetection(self, [ultrasound_sensob, ir_sensob_right, ir_sensob_left, line_detection_sensob], 1)
+       # go_around_object_behavior = GoAroundObject(self, [ir_sensob_left, ir_sensob_right], 1)
         follow_line_behavior = FollowLine(self, [line_following_sensob, endpoint_detection_sensob, line_detection_sensob], 1)
         red_detector_behavior = RedDetector(self, [camera_sensob, endpoint_detection_sensob], 1)
 
-        self.behaviors = [collision_detection_behavior, go_around_object_behavior, follow_line_behavior, red_detector_behavior]
+        self.behaviors = [collision_detection_behavior, follow_line_behavior, red_detector_behavior]
         print("Sensors, Sensobs and Behaviors generated!")
 
 
