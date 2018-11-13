@@ -97,7 +97,7 @@ class CollisionDetection(Behavior):
             self.motor_recommendations = ["turn", -20]
         else:
             self.motor_recommendations = ["turn", 20]
-        
+
         self.priority = 1
         self.match_degree = 1
 

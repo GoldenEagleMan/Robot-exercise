@@ -33,7 +33,7 @@ class LineFollowingSensob(Sensob):
         values_and_sensors = {}
         for i in range(0, len(red_values)):
             values_and_sensors[red_values[i]] = i
-        red_values.sort(reverse=True)
+        red_values.sort()
         self.value = values_and_sensors.get(red_values[0])
 
 
@@ -42,8 +42,9 @@ class LineDetectionSensob(Sensob):
     def update(self):
         red_values = self.sensor.get_value()
         for value in red_values:
-            if value <= 0.1:
+            if value <= 0.85:
                 self.value = True
+                return
         self.value = False
 
 
@@ -56,7 +57,8 @@ class EndpointDetectionSensob(Sensob):
             treshold -= value
         if treshold >= 2.5:
             self.value = True
-        self.value = False
+        else:
+            self.value = False
 
 
 class IRSensobLeft(Sensob):
