@@ -11,5 +11,5 @@ class Arbitrator:
                 prioritized_behavior = behavior
         print("prioritized behavior is " + str(prioritized_behavior))
         if prioritized_behavior is not None:
-            #self.bbcon.run_behavior = (prioritized_behavior.motor_recommendations, prioritized_behavior.halt_request)
-            self.bbcon.run_behavior = prioritized_behavior.motor_recommendations
+            self.bbcon.run_behavior = (prioritized_behavior.motor_recommendations, prioritized_behavior.halt_request)
+            #self.bbcon.run_behavior = prioritized_behavior.motor_recommendations

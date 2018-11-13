@@ -71,7 +71,7 @@ class CollisionDetection(Behavior):
 
     def consider_deactivation(self):
         # Collision detection will be/remain deactivated, if there is no object spotted through ultrasound
-        if (self.u_sensob.get_value() > self.distance):  # the preferred distance will be calculated later
+        if self.u_sensob.get_value() > self.distance:  # the preferred distance will be calculated later
             self.BBCON.deactivate_behavior(self)
             self.active_flag = False
 
@@ -177,13 +177,13 @@ class FollowLine(Behavior):
 
         # Drives left if the line is under sensor 1,2 maybe 3
         elif self.line_r_sensob.get_value() == 0 or self.line_r_sensob.get_value() == 1:
-            self.motor_recommendations = ["turn", -10]
+            self.motor_recommendations = ["turn", 10]
             self.priority = 0.6
             self.match_degree = 0.5
 
         # Drives right if the line is under sensor 5, 6 maybe 4
         elif self.line_r_sensob.get_value() == 4 or self.line_r_sensob.get_value() == 5:
-            self.motor_recommendations = ["turn", 10]
+            self.motor_recommendations = ["turn", -10]
             self.priority = 0.6
             self.match_degree = 0.5
 

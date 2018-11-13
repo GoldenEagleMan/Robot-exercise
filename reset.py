@@ -115,5 +115,6 @@ class Motors():
 if __name__ == "__main__":
     m = Motors()
     m.stop()
+    print("Motor resetted!")
 
 

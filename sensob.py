@@ -20,26 +20,9 @@ class Sensob:
         return self.value
 
 
-'''class IRSensob(Sensob):
-    ir_sensor = IRProximitySensor()
-
-    def __init__(self):
-        super().__init__(IRSensob.ir_sensor)
-
-
-class ReflectanceBoardSensob(Sensob):#0 svart 1 hvit
-
-    reflectance_board = ReflectanceSensors()
-
-    def __init__(self):
-        super().__init__(ReflectanceBoardSensob.reflectance_board)
-        self.threshold = 0.05'''
-
-
 class UltrasoundSensob(Sensob):
 
     def update(self):
-        #print(self.sensor.get_value())
         self.value = int(self.sensor.get_value() * 10) #cm to mm
 
 
@@ -51,7 +34,6 @@ class LineFollowingSensob(Sensob):
         for i in range(0, len(red_values)):
             values_and_sensors[red_values[i]] = i
         red_values.sort(reverse=True)
-        #self.value = (values_and_sensors.get(red_values[0]), values_and_sensors.get(red_values[2]))
         self.value = values_and_sensors.get(red_values[0])
 
 
@@ -69,10 +51,12 @@ class EndpointDetectionSensob(Sensob):
 
     def update(self):
         red_values = self.sensor.get_value()
+        treshold = 5
         for value in red_values:
-            if value - 0.1 > 0:
-                self.value = False
-        self.value = True
+            treshold -= value
+        if treshold >= 2.5:
+            self.value = True
+        self.value = False
 
 
 class IRSensobLeft(Sensob):

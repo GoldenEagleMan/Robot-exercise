@@ -7,6 +7,8 @@ from zumo_button import *
 from ultrasonic import *
 from reflectance_sensors import *
 from irproximity_sensor import *
+from camera import *
+import os
 
 class BBCON:
 
@@ -19,25 +21,20 @@ class BBCON:
         self.compile_active_behavior_list()
         self.active_behaviors = []
         self.arbitrator = Arbitrator(self)
-        self.run_behavior = (["forward", 0], False)
-        #self.run_behavior = ('F',0.5 )
-
-
+        self.run_behavior = None
 
     def run_one_timestep(self):
         self.compile_active_behavior_list()
-        print("updating objects")
         self.update_objects()
         #invoke arbitrator.
-        print("choosing action")
         self.arbitrator.choose_action()
         self.print_info_to_console()
-      #  if self.run_behavior[1]:
-       #     self.end_program()
-        self.motob.update(self.run_behavior)
+        if self.run_behavior[1]:
+            self.end_program()
+        self.motob.update(self.run_behavior[0])
         #reset all sensob
-        '''for sensob in self.active_sensobs:
-            sensob.reset()'''
+        for sensob in self.sensobs:
+            sensob.reset()
         return True
 
     def activate_behavior(self, behavior):
@@ -62,21 +59,18 @@ class BBCON:
 
     def update_objects(self):
         #update all sensors, sensobs and behaviors
-        camera_sensob = None
-        print("updating sensors")
+        camera_sensor = None
         for sensor in self.sensors:
-            print("Updating " + sensor.__class__.__name__)
-            sensor.update()
-        print("updating Sensobs")
-        for sensob in self.sensobs:
-            if not isinstance(sensob, CameraSensob):
-                sensob.update()
+            if not isinstance(sensor, Camera):
+                sensor.update()
             else:
-                camera_sensob = sensob
+                camera_sensor = sensor
         if self.behaviors[3].active_flag:
-            print("updating camera")
-            camera_sensob.update()
-        print("updating behaviors")
+            camera_sensor.update()
+
+        for sensob in self.sensobs:
+                sensob.update()
+
         for behavior in self.behaviors:
             behavior.update()
 
@@ -84,8 +78,13 @@ class BBCON:
         self.motob.update(("stopAllMotors", 0))
         return False
 
+    def cls(self):
+        os.system('cls' if os.name == 'nt' else 'clear')
 
     def print_info_to_console(self):
+        self.cls()
+        print("*****************Robot Dashboard********************")
+        print(self.sensobs[3].value)
         print("****************************************************")
         print("**************** Sensors Values ********************")
         for sensor in self.sensors:
@@ -99,9 +98,6 @@ class BBCON:
         print("************ Active recommendation *****************")
         print(self.run_behavior)
         print("****************************************************")
-        print("****************************************************")
-
-
 
     def build_sensob_and_behavior_list(self):
         ir_proximity_sensor = IRProximitySensor()
@@ -109,7 +105,7 @@ class BBCON:
         ultrasonic_sensor = Ultrasonic()
         camera = Camera(128, 30)
 
-        self.sensors = [ir_proximity_sensor, reflectance_board, ultrasonic_sensor]
+        self.sensors = [ir_proximity_sensor, reflectance_board, ultrasonic_sensor, camera]
 
         camera_sensob = CameraSensob(camera)
         ir_sensob_right = IRSensobRight(ir_proximity_sensor)
