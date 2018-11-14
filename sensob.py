@@ -82,8 +82,7 @@ class CameraSensob(Sensob):
         super().__init__(camera)
 
     def update(self):
-        pass
-        #self.interpret_image()
+        self.interpret_image()
         '''
         value is a tuple consisting of a bool (whether the picture is red or not) and
         a number between -1 and 1 that represents the direction of the redness
@@ -91,8 +90,9 @@ class CameraSensob(Sensob):
 
     def interpret_image(self):
         camera = self.sensor
-        camera.update()
-        image = camera.value # the matrix of pixels
+        image = camera.get_value() # the matrix of pixels
+        if image is None:
+            return
         occurrence_array = [0 for i in range(128)]
         pixel_counter = 0 # counts the amount of red pixels
 

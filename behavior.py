@@ -174,12 +174,16 @@ class FollowLine(Behavior):
             self.motor_recommendations = ["goForward", 0]
 
         # Drives left if the line is under sensor 1,2 maybe 3
-        elif self.line_r_sensob.get_value() == 0 or self.line_r_sensob.get_value() == 1:
-            self.motor_recommendations = ["turn", -10]
+        elif self.line_r_sensob.get_value() == 0:
+            self.motor_recommendations = ["turnAndWait", -20]
+        elif self.line_r_sensob.get_value() == 1:
+            self.motor_recommendations = ["turn", -20]
 
         # Drives right if the line is under sensor 5, 6 maybe 4
-        elif self.line_r_sensob.get_value() == 4 or self.line_r_sensob.get_value() == 5:
-            self.motor_recommendations = ["turn", 10]
+        elif self.line_r_sensob.get_value() == 4:
+            self.motor_recommendations = ["turn", 20]
+        elif self.line_r_sensob.get_value() == 5:
+            self.motor_recommendations = ["turnAndWait", 20]
 
         self.priority = 0.6
         self.match_degree = 0.5
@@ -214,6 +218,10 @@ class RedDetector(Behavior):
     # this behavior will give motor_recommendations such that it will turn left if it receives a negative number
     #  and right with a positive number if the number exceeds/fall under a certain value
     def sense_and_act(self):
+        if self.c_sensob.get_value() is None:
+            self.priority = 0
+            self.match_degree = 0
+            return
         if -0.3 < self.c_sensob.get_value()[1] < 0.3:
             self.motor_recommendations = ["goForward", 0]
         else:
