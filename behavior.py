@@ -13,7 +13,7 @@ class Behavior:
         self.BBCON = BBCON
         self.sensobs = sensobs
         self.motor_recommendations = None
-        self.active_flag = True
+        self.active_flag = False
         self.halt_request = False
         # halt request not yet implemented
         self.priority = priority
@@ -68,19 +68,21 @@ class CollisionDetection(Behavior):
     def consider_activation(self):
         # Collision detection will be/remain activated, if an object is close,
         # and whilst going around an object
-        if self.u_sensob.get_value() < self.distance or self.r_ir.get_value or self.l_ir.get_value or not self.line_det:
+        if self.u_sensob.get_value() < self.distance or self.r_ir.get_value \
+                or self.l_ir.get_value or not self.line_det:
             self.active_flag = True
-            self.BBCON.activate_behavior(self)
+            #self.BBCON.activate_behavior(self)
 
     def consider_deactivation(self):
         # Collision detection will be/remain deactivated, if there is no object spotted through ultrasound
-        if self.u_sensob.get_value() > self.distance or not self.r_ir.get_value or not self.l_ir.get_value or self.line_det:  # the preferred distance will be calculated later
-            self.BBCON.deactivate_behavior(self)
+        if self.u_sensob.get_value() > self.distance or not self.r_ir.get_value \
+                or not self.l_ir.get_value or self.line_det:  # the preferred distance will be calculated later
+            #self.BBCON.deactivate_behavior(self)
             self.active_flag = False
 
     def update(self):
-        self.consider_deactivation()
         self.consider_activation()
+        self.consider_deactivation()
 
         if self.active_flag:
             self.sense_and_act()

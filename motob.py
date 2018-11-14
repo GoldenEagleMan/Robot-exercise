@@ -15,21 +15,21 @@ class Motob:
     def operationalize(self):
         command = self.value[0]
         angle = self.value[1]
-        speed = 0.25 #+ 0.75 * abs(angle/90)
+        speed = 0.10 #+ 0.75 * abs(angle/90)
         time = angle/90 * 2
         if command == "goForward":
-            #self.motor.set_value((speed, speed))
-            self.motor.forward(speed)
+            self.motor.set_value((speed, speed))
+            #self.motor.forward(speed)
         elif command == "turn":
             if angle > 0:
-                #self.motor.set_value((0.25, speed))
-                self.motor.left(speed)
+                self.motor.set_value((speed*2, speed/2))
+                #self.motor.left(speed)
             else:
-                #self.motor.set_value((speed, 0.25))
-                self.motor.right(speed)
+                self.motor.set_value((speed/2, speed*2))
+                #self.motor.right(speed)
         elif command == "goBackward":
-            #self.motor.set_value((- speed, - speed))
-            self.motor.backward(speed)
+            self.motor.set_value((- speed, - speed))
+            #self.motor.backward(speed)
         elif command == "stopAllMotors":
             self.motor.stop()
         else:

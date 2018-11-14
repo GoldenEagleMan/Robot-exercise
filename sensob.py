@@ -42,7 +42,7 @@ class LineDetectionSensob(Sensob):
     def update(self):
         red_values = self.sensor.get_value()
         for value in red_values:
-            if value <= 0.85:
+            if value <= 0.75:
                 self.value = True
                 return
         self.value = False
@@ -67,11 +67,13 @@ class IRSensobLeft(Sensob):
         self.value = self.sensor.get_value()[0] #0,1 left and right? right and left?
         pass
 
+
 class IRSensobRight(Sensob):
 
     def update(self):
         self.value = self.sensor.get_value()[1]
         pass
+
 
 class CameraSensob(Sensob):
 
@@ -80,8 +82,8 @@ class CameraSensob(Sensob):
         super().__init__(camera)
 
     def update(self):
-        self.sensor.reset()
-        self.value = self.interpret_image()
+        pass
+        #self.interpret_image()
         '''
         value is a tuple consisting of a bool (whether the picture is red or not) and
         a number between -1 and 1 that represents the direction of the redness
@@ -106,9 +108,9 @@ class CameraSensob(Sensob):
         redness = pixel_counter/(camera.img_width*camera.img_height)
         threshold = 0.10  # how many percent of red pixels that is needed to be considered red
         if redness > threshold:
-            return (True, direction)
+            self.value = (True, direction)
         else:
-            return (False, direction)
+            self.value = (False, direction)
 
 
     @staticmethod

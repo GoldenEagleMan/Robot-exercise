@@ -17,27 +17,26 @@ class BBCON:
         self.sensors = None
         self.behaviors = None
         self.sensobs = None
-        self.build_sensob_and_behavior_list()
-        self.compile_active_behavior_list()
         self.active_behaviors = []
         self.arbitrator = Arbitrator(self)
-        self.run_behavior = None
+        self.run_behavior = (["stopAllMotors", 0], False)
+        self.build_sensob_and_behavior_list()
+        self.compile_active_behaviors_list()
 
     def run_one_timestep(self):
-        #self.compile_active_behavior_list()
         self.update_objects()
-        #invoke arbitrator.
+        self.compile_active_behaviors_list()
         self.arbitrator.choose_action()
         self.print_info_to_console()
         if self.run_behavior[1]:
             self.end_program()
         self.motob.update(self.run_behavior[0])
-        #reset all sensob
         for sensob in self.sensobs:
             sensob.reset()
         return True
 
     def activate_behavior(self, behavior):
+        print("activate behavior called")
         if behavior not in self.active_behaviors:
             self.active_behaviors.append(behavior)
         pass
@@ -47,18 +46,7 @@ class BBCON:
             self.active_behaviors.remove(behavior)
         pass
 
-
-    def compile_active_behavior_list(self):
-
-        # construct active behaviors list
-        self.active_behaviors = []
-        for behavior in self.behaviors:
-            if behavior.active_flag:
-                self.active_behaviors.append(behavior)
-
-
     def update_objects(self):
-        #update all sensors, sensobs and behaviors
         camera_sensor = None
         for sensor in self.sensors:
             if not isinstance(sensor, Camera):
@@ -67,10 +55,8 @@ class BBCON:
                 camera_sensor = sensor
         if self.behaviors[2].active_flag:
             camera_sensor.update()
-
         for sensob in self.sensobs:
                 sensob.update()
-
         for behavior in self.behaviors:
             behavior.update()
 
@@ -125,8 +111,13 @@ class BBCON:
 
         self.behaviors = [collision_detection_behavior, follow_line_behavior, red_detector_behavior]
         print("Sensors, Sensobs and Behaviors generated!")
+        print(self.behaviors)
 
-
+    def compile_active_behaviors_list(self):
+        self.active_behaviors = []
+        for behavior in self.behaviors:
+            if behavior.active_flag:
+                self.active_behaviors.append(behavior)
 
     def run(self):
         run = True
