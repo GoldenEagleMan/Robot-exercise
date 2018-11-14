@@ -42,7 +42,7 @@ class LineDetectionSensob(Sensob):
     def update(self):
         red_values = self.sensor.get_value()
         for value in red_values:
-            if value <= 0.75:
+            if value <= 0.5:
                 self.value = True
                 return
         self.value = False
@@ -100,17 +100,18 @@ class CameraSensob(Sensob):
             for w in range(camera.img_width):
                 pixel = image.getpixel((w, h))
                 r, g, b = pixel[0], pixel[1], pixel[2]
-                if r >= 180 and g < 45 and b < 45:
+                #print(pixel)
+                if r > 160 and g < 90 and b < 90:
                     occurrence_array[w] += 1
                     pixel_counter += 1
 
-        direction = (CameraSensob.max_index(occurrence_array) - camera.img_width)/camera.img_width
+        direction = (CameraSensob.max_index(occurrence_array) - camera.img_width/2)/(camera.img_width/2)
         redness = pixel_counter/(camera.img_width*camera.img_height)
-        threshold = 0.10  # how many percent of red pixels that is needed to be considered red
+        threshold = 0.02  # how many percent of red pixels that is needed to be considered red
         if redness > threshold:
             self.value = (True, direction)
         else:
-            self.value = (False, direction)
+            self.value = (False, None)
 
 
     @staticmethod

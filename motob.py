@@ -18,7 +18,7 @@ class Motob:
         speed = 0.10 + 0.90 * abs(angle/90)
         time = 1
         if command == "goForward":
-            self.motor.set_value((speed*2, speed*2))
+            self.motor.set_value((speed*1.5, speed*1.5))
             #self.motor.forward(speed)
         elif command == "turn":
             if angle > 0:

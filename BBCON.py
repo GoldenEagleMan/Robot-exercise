@@ -29,7 +29,7 @@ class BBCON:
         self.arbitrator.choose_action()
         self.print_info_to_console()
         if self.run_behavior[1]:
-            self.end_program()
+            return False
         self.motob.update(self.run_behavior[0])
         for sensob in self.sensobs:
             sensob.reset()
@@ -68,7 +68,7 @@ class BBCON:
         os.system('cls' if os.name == 'nt' else 'clear')
 
     def print_info_to_console(self):
-        self.cls()
+        #self.cls()
         print("*****************Robot Dashboard********************")
         print(self.sensobs[3].value)
         print("****************************************************")
@@ -106,8 +106,8 @@ class BBCON:
 
         collision_detection_behavior = CollisionDetection(self, [ultrasound_sensob, ir_sensob_right, ir_sensob_left, line_detection_sensob], 1)
        # go_around_object_behavior = GoAroundObject(self, [ir_sensob_left, ir_sensob_right], 1)
-        follow_line_behavior = FollowLine(self, [line_following_sensob, endpoint_detection_sensob, line_detection_sensob], 1)
-        red_detector_behavior = RedDetector(self, [camera_sensob, endpoint_detection_sensob], 1)
+        follow_line_behavior = FollowLine(self, [line_following_sensob, endpoint_detection_sensob, line_detection_sensob], 0.7)
+        red_detector_behavior = RedDetector(self, [camera_sensob, endpoint_detection_sensob, line_detection_sensob], 0.5)
 
         self.behaviors = [collision_detection_behavior, follow_line_behavior, red_detector_behavior]
         print("Sensors, Sensobs and Behaviors generated!")
@@ -115,9 +115,12 @@ class BBCON:
 
     def compile_active_behaviors_list(self):
         self.active_behaviors = []
+        print(self.active_behaviors)
         for behavior in self.behaviors:
+            print(behavior.__class__.__name__ + str(behavior.active_flag))
             if behavior.active_flag:
                 self.active_behaviors.append(behavior)
+        print(self.active_behaviors)
 
     def run(self):
         run = True
@@ -128,5 +131,9 @@ if __name__ == "__main__":
     bbcon = BBCON()
     print("Press the button to start the robot")
     ZumoButton().wait_for_press()
-    while True:
-        bbcon.run_one_timestep()
+    run = True
+    while run:
+       run = bbcon.run_one_timestep()
+    bbcon.cls()
+    print("Congratulation!!! Demo is over!!")
+

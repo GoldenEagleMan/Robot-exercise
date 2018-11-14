@@ -1,5 +1,5 @@
 from abc import abstractclassmethod
-
+import time
 ''''
 motor recomandation in following form: (("command", angle) )
 angle in integer [-90, 90] where negative value is left (0 if goForward, stopAllMotors or goBackward)
@@ -63,14 +63,18 @@ class CollisionDetection(Behavior):
         self.r_ir = sensobs[1]
         self.l_ir = sensobs[2]
         self.line_det  = sensobs[3]
-        self.distance = 50  # 50mm
+        self.distance = 90  # 50mm
 
     def consider_activation(self):
         # Collision detection will be/remain activated, if an object is close,
         # and whilst going around an object
-        if self.u_sensob.get_value() < self.distance or self.r_ir.get_value \
-                or self.l_ir.get_value or not self.line_det:
+        if self.u_sensob.get_value() < self.distance or not self.r_ir.get_value \
+                or not self.l_ir.get_value:
             self.active_flag = True
+            print("kjghkjhkjhkjhkjhkjhkjhkjh")
+        else:
+            print("deaktibvering")
+            self.active_flag = False
             #self.BBCON.activate_behavior(self)
 
     def consider_deactivation(self):
@@ -81,9 +85,8 @@ class CollisionDetection(Behavior):
             self.active_flag = False
 
     def update(self):
+        #self.consider_deactivation()
         self.consider_activation()
-        self.consider_deactivation()
-
         if self.active_flag:
             self.sense_and_act()
             self.weight = self.priority * self.match_degree
@@ -96,7 +99,7 @@ class CollisionDetection(Behavior):
         elif self.l_ir.get_value():
             self.motor_recommendations = ["turn", 20]
         elif self.u_sensob.get_value() < self.distance:
-            self.motor_recommendations = ["turn", -20]
+            self.motor_recommendations = ["stopAllMotors", 0]
         else:
             self.motor_recommendations = ["turn", 20]
 
@@ -158,12 +161,12 @@ class FollowLine(Behavior):
 
     # should be deactivated when it reaches the endpoint
     def consider_deactivation(self):
-        if self.end_r_sensob.get_value():
+        if self.end_r_sensob.get_value() or not self.det_r_sensob.get_value():
             self.active_flag = False
 
     def update(self):
-        self.consider_deactivation()
         self.consider_activation()
+        self.consider_deactivation()
         if self.active_flag:
             self.sense_and_act()
             self.weight = self.priority * self.match_degree
@@ -195,6 +198,7 @@ class RedDetector(Behavior):
         self.name = "Red detector"
         self.c_sensob = sensobs[0]
         self.end_of_line = sensobs[1]
+        self.line_det = sensobs[2]
         self.second_demo = False
 
     def consider_activation(self):
@@ -202,12 +206,13 @@ class RedDetector(Behavior):
             self.active_flag = True
 
     def consider_deactivation(self):
-        if not self.second_demo:
+        if not self.second_demo or self.line_det.get_value():
             self.active_flag = False
 
     def update(self):
         if self.end_of_line.get_value():
-            self.second_demo = True
+            self.second_demo = not self.second_demo
+            time.sleep(0.01)
         self.consider_activation()
         self.consider_deactivation()
 
@@ -219,13 +224,17 @@ class RedDetector(Behavior):
     #  and right with a positive number if the number exceeds/fall under a certain value
     def sense_and_act(self):
         if self.c_sensob.get_value() is None:
+            self.motor_recommendations = ["stopAllMotors", 0]
             self.priority = 0
             self.match_degree = 0
             return
-        if -0.3 < self.c_sensob.get_value()[1] < 0.3:
-            self.motor_recommendations = ["goForward", 0]
+        if self.c_sensob.get_value()[0]:
+            if -0.4 < self.c_sensob.get_value()[1] < 0.4:
+                self.motor_recommendations = ["goForward", 0]
+            else:
+                self.motor_recommendations = ["turnAndWait", self.c_sensob.get_value()[1] * 30]
         else:
-            self.motor_recommendations = ["turn", self.c_sensob.get_value()[1] * 30]
+            self.motor_recommendations = ["stopAllMotors", 0]
         self.priority = 0.5
         self.match_degree = 0.5
 
